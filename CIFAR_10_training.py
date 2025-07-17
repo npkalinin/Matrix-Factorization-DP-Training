@@ -3,14 +3,14 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 import torch.nn.functional as F
 from typing import Callable, Dict, Tuple
 import numpy as np
 from opacus import GradSampleModule
 from opacus import PrivacyEngine
 from dp_optimizer import DPMFSGD
-
+import random
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -90,12 +90,6 @@ class CNNModel(nn.Module):
         x = self.fc(x)
 
         return x
-
-
-import torch
-import torchvision
-import random
-from torch.utils.data import DataLoader, Subset
 
 
 def train(model, train_dataset, criterion, optimizer, epochs, batch_size, device):
