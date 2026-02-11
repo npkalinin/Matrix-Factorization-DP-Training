@@ -44,8 +44,6 @@ class DPMFSGD(Optimizer):
         if use_amplification:
           self.C_sens = 1
 
-        # Initialize first moment (m) and second moment (v) for all parameters
-
         for group in self.param_groups:
           noise_buffer_size = self.band_width - (self.factorization_type == 'band')
           group['accum_grads'] = [torch.zeros_like(param.data, device=device) if param.requires_grad else None for param in group['params']]
@@ -158,7 +156,6 @@ class DPMFSGD(Optimizer):
                     total_norm += torch.norm(grad_samples.view(micro_batch_size, -1), dim=1) ** 2
 
         total_norm = total_norm ** 0.5
-        print("total norm", total_norm[:4])
         clip_coef = (self.l2_norm_clip / (total_norm + 1e-6)).clamp(max=1.0)
 
         for group in self.param_groups:
